@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
 import fetchData from '../util/fetchData';
 import DetailView from './DetailView';
+import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
 
 const outerStyle = () => css`
   display: flex;
@@ -35,34 +36,24 @@ export default function RenderMovies({ searchBar }) {
   useEffect(() => {
     fetchData(searchBar, setTotalMovieData);
   }, [searchBar]);
-
+  console.log(totalMovieData);
   if (!totalMovieData) return <p>loading...</p>;
 
   return (
     <div css={outerStyle}>
       {totalMovieData.map((movie, index) => {
         return (
-          <div
-            css={innerStyle()}
-            key={index}
-            onClick={() => setModalDetailView(true)}
-          >
-            <section>
-              {/* <p>
-                {movie['original_title']}{' '}
-                {movie['release_date']
-                  ? '(' + movie['release_date'].slice(0, 4) + ')'
-                  : null}
-              </p> */}
-            </section>
-            <img
-              src={
-                movie['poster_path']
-                  ? `https://image.tmdb.org/t/p/w200${movie['poster_path']}`
-                  : 'https://image.shutterstock.com/image-vector/no-image-available-sign-absence-260nw-373244122.jpg'
-              }
-              alt={`movieposter of   ${movie['original_title']}`}
-            />
+          <div css={innerStyle} key={index}>
+            <Link to={`/movie/${movie.id}`}>
+              <img
+                src={
+                  movie['poster_path']
+                    ? `https://image.tmdb.org/t/p/w200${movie['poster_path']}`
+                    : 'https://image.shutterstock.com/image-vector/no-image-available-sign-absence-260nw-373244122.jpg'
+                }
+                alt={`movieposter of   ${movie['original_title']}`}
+              />
+            </Link>
           </div>
         );
       })}
