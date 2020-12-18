@@ -20,7 +20,7 @@ const style = () => css`
     background-position: 10px 50%;
     transition: 0.3s;
     transition-timing-function: ease-out;
-    cursor: pointer;
+    cursor: text;
     :focus {
       transform: scale(1.05);
       cursor: text;
@@ -29,12 +29,15 @@ const style = () => css`
 `;
 
 export default function SearchBar(props) {
+  function handleChange(e) {
+    if (/^\s/.test(e.currentTarget.value)) {
+      e.currentTarget.value = '';
+    }
+    props.setSearchBar(e.currentTarget.value);
+  }
   return (
     <div css={style}>
-      <input
-        value={props.searchBar}
-        onChange={(e) => props.setSearchBar(e.currentTarget.value)}
-      />
+      <input value={props.searchBar} onChange={handleChange} />
     </div>
   );
 }

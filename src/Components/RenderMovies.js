@@ -2,6 +2,7 @@
 import { css } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
 import fetchData from '../util/fetchData';
+import DetailView from './DetailView';
 
 const outerStyle = () => css`
   display: flex;
@@ -22,13 +23,14 @@ const innerStyle = () => css`
   }
   :hover {
     filter: brightness(100%);
-    transition: 0.2s ease-out;
-    transform: scale(1.05);
+    transition: 0.3s ease-out;
+    transform: scale(1.01);
     z-index: 1000;
   }
 `;
 export default function RenderMovies({ searchBar }) {
   const [totalMovieData, setTotalMovieData] = useState();
+  const [modalDetailView, setModalDetailView] = useState(false);
 
   useEffect(() => {
     fetchData(searchBar, setTotalMovieData);
@@ -38,9 +40,13 @@ export default function RenderMovies({ searchBar }) {
 
   return (
     <div css={outerStyle}>
-      {totalMovieData.map((movie, i) => {
+      {totalMovieData.map((movie, index) => {
         return (
-          <div css={innerStyle()} key={i}>
+          <div
+            css={innerStyle()}
+            key={index}
+            onClick={() => setModalDetailView(true)}
+          >
             <section>
               {/* <p>
                 {movie['original_title']}{' '}
@@ -61,6 +67,10 @@ export default function RenderMovies({ searchBar }) {
         );
       })}
       ;
+      <DetailView
+        modalDetailView={modalDetailView}
+        setModalDetailView={setModalDetailView}
+      />{' '}
     </div>
   );
 }
