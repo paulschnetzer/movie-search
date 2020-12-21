@@ -2,8 +2,8 @@
 import { css } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
 import fetchData from '../util/fetchData';
-import DetailView from './DetailView';
-import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+
+import { Link } from 'react-router-dom';
 
 const outerStyle = () => css`
   display: flex;
@@ -17,6 +17,9 @@ const innerStyle = () => css`
   margin-bottom: -4px;
   position: relative;
   border-radius: 20px;
+  img {
+    height: 300px;
+  }
   filter: brightness(70%);
   :not(:hover) {
     transition: 0.1s ease-out;
@@ -31,7 +34,6 @@ const innerStyle = () => css`
 `;
 export default function RenderMovies({ searchBar }) {
   const [totalMovieData, setTotalMovieData] = useState();
-  const [modalDetailView, setModalDetailView] = useState(false);
 
   useEffect(() => {
     fetchData(searchBar, setTotalMovieData);
@@ -58,10 +60,6 @@ export default function RenderMovies({ searchBar }) {
         );
       })}
       ;
-      <DetailView
-        modalDetailView={modalDetailView}
-        setModalDetailView={setModalDetailView}
-      />{' '}
     </div>
   );
 }
