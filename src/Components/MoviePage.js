@@ -11,12 +11,12 @@ const outerStyle = () => css`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh;
   main {
     width: 900px;
     min-height: 400px;
     display: flex;
     align-items: center;
+    margin-top: 200px;
     img {
       height: 400px;
       width: 266px;
@@ -98,18 +98,14 @@ export default function MoviePage({ match }) {
   useEffect(() => {
     fetchData(movieId, setMovieData);
   }, [movieId]);
-  console.log(movieData);
+
   return (
     <div>
       {movieData ? (
         <div css={outerStyle}>
           <main>
             <img
-              src={
-                movieData['poster_path']
-                  ? `https://image.tmdb.org/t/p/w300${movieData['poster_path']}`
-                  : 'https://image.shutterstock.com/image-vector/no-image-available-sign-absence-260nw-373244122.jpg'
-              }
+              src={`https://image.tmdb.org/t/p/w300${movieData['poster_path']}`}
               alt={`movieposter of   ${movieData['original_title']}`}
             />
             <div className="textContainer">
@@ -147,7 +143,7 @@ export default function MoviePage({ match }) {
               </section>
             </div>
           </main>
-          <Reviews />
+          <Reviews movieId={movieId} />
           <Link to="/">Back to homepage</Link>
         </div>
       ) : (

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
-import fetchData from '../util/fetchData';
+import { fetchDataByGenre, fetchDataByTitle } from '../util/fetchData';
 
 import { Link } from 'react-router-dom';
 
@@ -32,32 +32,37 @@ const innerStyle = () => css`
     z-index: 1000;
   }
 `;
-export default function RenderMovies({ searchBar }) {
+export default function RenderMovies(props) {
   const [totalMovieData, setTotalMovieData] = useState();
+  const [searchBy, setSearchBy] = useState('genre'); //title, genre, actor
 
   useEffect(() => {
-    fetchData(searchBar, setTotalMovieData);
-  }, [searchBar]);
-  console.log(totalMovieData);
+    if (searchBy === 'title') {
+      fetchDataByTitle(props.searchBar, setTotalMovieData);
+    }
+    if (searchBy === 'genre') {
+      fetchDataByGenre(props.searchBar, setTotalMovieData);
+    }
+  }, [props.searchBar]);
+
   if (!totalMovieData) return <p>loading...</p>;
 
   return (
     <div css={outerStyle}>
       {totalMovieData.map((movie, index) => {
-        return (
-          <div css={innerStyle} key={index}>
-            <Link to={`/movie/${movie.id}`}>
-              <img
-                src={
-                  movie['poster_path']
-                    ? `https://image.tmdb.org/t/p/w200${movie['poster_path']}`
-                    : 'https://image.shutterstock.com/image-vector/no-image-available-sign-absence-260nw-373244122.jpg'
-                }
-                alt={`movieposter of   ${movie['original_title']}`}
-              />
-            </Link>
-          </div>
-        );
+        if (movie['poster_path']) {
+          return (
+            <div css={innerStyle} key={index}>
+              <Link to={`/movie/${movie.id}`}>
+                <img
+                  src={`https://image.tmdb.org/t/p/w200${movie['poster_path']}`}
+                  alt={`movieposter of ${movie['original_title']}`}
+                />
+              </Link>
+            </div>
+          );
+        }
+        return null;
       })}
       ;
     </div>
