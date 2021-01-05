@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
 import Reviews from './Reviews';
+import { fetchData } from '../util/fetchData';
 const API_KEY = '268a7d083c5b3d50039c4331c0b31383';
 
 const outerStyle = () => css`
@@ -87,17 +88,10 @@ export default function MoviePage({ match }) {
   } = match;
   const [movieData, setMovieData] = useState();
 
-  async function fetchData(movieId, setData) {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`,
-    );
-    const movieData = await response.json();
-    setData(movieData);
-  }
-
   useEffect(() => {
     fetchData(movieId, setMovieData);
   }, [movieId]);
+  console.log(movieData);
 
   return (
     <div>

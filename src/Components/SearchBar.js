@@ -3,9 +3,9 @@ import { css } from '@emotion/react';
 import Select from 'react-select';
 import React, { useState, useEffect } from 'react';
 import {
-  fetchDataAllGenres,
+  fetchAllGenres,
   fetchDataByGenre,
-  fetchMultiSearch,
+  fetchDataByMultiSearch,
 } from '../util/fetchData';
 import { fetchDataByTitle } from '../util/fetchData';
 import useLocalStorage from '../util/localStorage';
@@ -75,7 +75,7 @@ export function DetailSearchBar(props) {
   const [years, setYears] = useState(null);
   const [genres, setGenres] = useState(null);
   useEffect(() => {
-    fetchDataAllGenres(setGenres);
+    fetchAllGenres(setGenres);
     setYears(generateArrayOfYears());
   }, []);
 
@@ -90,7 +90,7 @@ export function DetailSearchBar(props) {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        fetchMultiSearch(
+        fetchDataByMultiSearch(
           selectedYear.value,
           selectedGenre.value,
           props.setTotalMovieData,
