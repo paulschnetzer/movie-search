@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React, { useRef, useEffect, useState } from 'react';
@@ -56,6 +57,7 @@ const style = (toggle) => css`
       }
       li {
         list-style: none;
+        z-index: 10000;
         display: relative;
         .dropdown-content {
           display: ${toggle ? 'block' : 'none'};
@@ -79,7 +81,7 @@ const style = (toggle) => css`
   }
 `;
 
-export default function Header() {
+export default function Header(props) {
   const [isOpen, setIsOpen] = useState(false);
   let handleToogle = () => {
     setIsOpen(!isOpen);
@@ -87,6 +89,10 @@ export default function Header() {
   let domNode = useClickOutside(() => {
     setIsOpen(false);
   });
+  let handleClick = (option) => {
+    props.setTotalMovieData('');
+    props.setSearchBy(option);
+  };
 
   return (
     <header css={style(isOpen)}>
@@ -105,9 +111,9 @@ export default function Header() {
                 Search by{isOpen ? '⏶' : '⏷'}
               </button>
               <div className="dropdown-content">
-                <div>Title</div>
-                <div>Actor</div>
-                <div>Genre</div>
+                <div onClick={() => handleClick('title')}>Title</div>
+                <div onClick={() => handleClick('detail')}>Details</div>
+                <div>Actors</div>
               </div>
             </li>
           </ul>

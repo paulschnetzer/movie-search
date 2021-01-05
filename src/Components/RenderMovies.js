@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useEffect, useState } from 'react';
-import { fetchDataByGenre, fetchDataByTitle } from '../util/fetchData';
+
+import { fetchNewPageTitle } from '../util/fetchData';
 
 import { Link } from 'react-router-dom';
 
@@ -33,23 +33,20 @@ const innerStyle = () => css`
   }
 `;
 export default function RenderMovies(props) {
-  const [totalMovieData, setTotalMovieData] = useState();
-  const [searchBy, setSearchBy] = useState('genre'); //title, genre, actor
+  const handleAdd = () => {
+    fetchNewPageTitle(
+      props.searchBar,
+      props.totalMovieData,
+      props.setTotalMovieData,
+      2,
+    );
+  };
 
-  useEffect(() => {
-    if (searchBy === 'title') {
-      fetchDataByTitle(props.searchBar, setTotalMovieData);
-    }
-    if (searchBy === 'genre') {
-      fetchDataByGenre(props.searchBar, setTotalMovieData);
-    }
-  }, [props.searchBar]);
-
-  if (!totalMovieData) return <p>loading...</p>;
+  if (!props.totalMovieData) return <p>loading...</p>;
 
   return (
     <div css={outerStyle}>
-      {totalMovieData.map((movie, index) => {
+      {props.totalMovieData.map((movie, index) => {
         if (movie['poster_path']) {
           return (
             <div css={innerStyle} key={index}>
@@ -64,7 +61,7 @@ export default function RenderMovies(props) {
         }
         return null;
       })}
-      ;
+      <button onClick={handleAdd}>More</button>;
     </div>
   );
 }
