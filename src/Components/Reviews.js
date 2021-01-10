@@ -32,12 +32,10 @@ export default function Reviews(props) {
   useEffect(() => {
     fetchData(props.movieId, setReviews);
   }, [props.movieId]);
-  // const [toggle, setToggle] = useState(reviews);
 
   if (!reviews) {
-    return <div></div>;
+    return null;
   }
-
   return (
     <div css={outerStyle}>
       <h1>{reviews.length === 0 ? 0 : reviews.length} Reviews</h1>
@@ -51,12 +49,3 @@ export default function Reviews(props) {
     </div>
   );
 }
-
-// import React from 'react';
-
-// export default function Reviews() {
-//   let array = ['a', 'aa', 'aaa', 'dasdfasfasfa'];
-//   return array.map((x) => {
-//     return x.length < 5 ? <div>h</div> : <div>P</div>;
-//   });
-// }

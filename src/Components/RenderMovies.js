@@ -1,15 +1,36 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { SearchBars } from './SearchBar';
-import { fetchNewPageTitle } from '../util/fetchData';
-import useLocalStorage from '../util/localStorage';
 import { Link } from 'react-router-dom';
+import { fetchNewPageTitle, fetchNewPageDetail } from '../util/fetchData';
+import TitleSearchBar from './TitleSearchBar';
+import { DetailSearchBar } from './DetailSearchBar';
 
 const outerStyle = () => css`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  button {
+    margin: 20px 0;
+    border-radius: 10px;
+    font-size: 100%;
+    font-weight: bold;
+    padding: 10px 20px;
+    color: #e6f7ff;
+    background-color: #3355ff;
+    border: none;
+    letter-spacing: 2px;
+    transition: 0.3s;
+    outline: none;
+    :hover {
+      background-color: #001a99;
+      border: none;
+    }
+  }
 `;
 
 const innerStyle = () => css`
@@ -32,29 +53,51 @@ const innerStyle = () => css`
     z-index: 1000;
   }
 `;
-export default function RenderMovies(props) {
-  const [searchBar, setSearchBar] = useLocalStorage('searchBar', '');
-  const handleAdd = () => {
-    fetchNewPageTitle(
-      searchBar,
-      props.totalMovieData,
-      props.setTotalMovieData,
-      2,
-    );
-  };
 
+export default function RenderMovies(props) {
+  const handleAdd = () => {
+    if (JSON.parse(localStorage.getItem('searchBy')) === 'title') {
+      fetchNewPageTitle(
+        localStorage.getItem('movie'),
+        props.totalMovieData,
+        props.setTotalMovieData,
+        props.moviePage,
+        props.setMoviePage,
+      );
+    } else {
+      fetchNewPageDetail(
+        JSON.parse(localStorage.getItem('year')).value,
+        JSON.parse(localStorage.getItem('genre')).value,
+        props.totalMovieData,
+        props.setTotalMovieData,
+        props.moviePage,
+        props.setMoviePage,
+      );
+    }
+  };
   return (
     <>
-      <SearchBars
-        setTotalMovieData={props.setTotalMovieData}
-        searchBar={searchBar}
-        setSearchBar={setSearchBar}
-        searchBy={props.searchBy}
-      />
+      {props.searchBy === 'title' ? (
+        <TitleSearchBar
+          setTotalMovieData={props.setTotalMovieData}
+          setMoviePage={props.setMoviePage}
+          setSearchBy={props.setSearchBy}
+        />
+      ) : (
+        <DetailSearchBar
+          setTotalMovieData={props.setTotalMovieData}
+          setMoviePage={props.setMoviePage}
+          setSearchBy={props.setSearchBy}
+        />
+      )}
+
       {props.totalMovieData ? (
         <div css={outerStyle}>
-          {props.totalMovieData.map((movie, index) => {
-            if (movie['poster_path']) {
+          <section>
+            {props.totalMovieData.map((movie, index) => {
+              if (!movie['poster_path']) {
+                return null;
+              }
               return (
                 <div css={innerStyle} key={index}>
                   <Link to={`/movie/${movie.id}`}>
@@ -65,10 +108,9 @@ export default function RenderMovies(props) {
                   </Link>
                 </div>
               );
-            }
-            return null;
-          })}
-          <button onClick={handleAdd}>More</button>;
+            })}
+          </section>
+          <button onClick={handleAdd}>Load More Results</button>
         </div>
       ) : null}
     </>

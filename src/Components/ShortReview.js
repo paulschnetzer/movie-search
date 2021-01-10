@@ -17,7 +17,6 @@ const style = () => css`
     p {
       display: inline;
       font-size: 70%;
-
       p {
         font-style: italic;
         font-size: 100%;

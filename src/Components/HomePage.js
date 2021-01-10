@@ -2,21 +2,28 @@ import useLocalStorage from '../util/localStorage';
 
 import RenderMovies from './RenderMovies';
 import Header from './Header';
-import Test from './test';
+import Banner from './Banner';
 
 export default function HomePage() {
-  // const [searchBy, setSearchBy] = useLocalStorage('searchBy', 'title');
-  // const [totalMovieData, setTotalMovieData] = useLocalStorage('movieData', '');
-  // console.log(totalMovieData);
+  const [totalMovieData, setTotalMovieData] = useLocalStorage('movieData', '');
+  const [searchBy, setSearchBy] = useLocalStorage('searchBy', 'title');
+  const [moviePage, setMoviePage] = useLocalStorage('moviePages', 2);
   return (
-    // <div>
-    //   <Header setSearchBy={setSearchBy} setTotalMovieData={setTotalMovieData} />
-    //   <RenderMovies
-    //     searchBy={searchBy}
-    //     totalMovieData={totalMovieData}
-    //     setTotalMovieData={setTotalMovieData}
-    //   />
-    // </div>
-    <Test />
+    <>
+      <Header
+        setSearchBy={setSearchBy}
+        setTotalMovieData={setTotalMovieData}
+        setMoviePage={setMoviePage}
+      />
+      <Banner />
+      <RenderMovies
+        searchBy={searchBy}
+        totalMovieData={totalMovieData}
+        setTotalMovieData={setTotalMovieData}
+        moviePage={moviePage}
+        setMoviePage={setMoviePage}
+        setSearchBy={setSearchBy}
+      />
+    </>
   );
 }

@@ -46,9 +46,9 @@ const style = () => css`
 `;
 
 export default function LongReview(props) {
-  const [toggle, setToogle] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   let handleToggle = () => {
-    setToogle(!toggle);
+    setIsOpen(!isOpen);
   };
   let shortendContent = props.review.content.slice(0, 500) + ' . . .';
   return (
@@ -59,10 +59,10 @@ export default function LongReview(props) {
         </p>
       </div>
       <div className="ContentContainer">
-        {toggle ? props.review.content : shortendContent}
+        {isOpen ? props.review.content : shortendContent}
       </div>
       <button onClick={handleToggle}>
-        {toggle ? 'Show Less' : 'Show More'}
+        {isOpen ? 'Show Less' : 'Show More'}
       </button>
     </section>
   );

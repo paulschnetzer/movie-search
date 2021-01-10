@@ -4,8 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
 import Reviews from './Reviews';
-import { fetchData } from '../util/fetchData';
-const API_KEY = '268a7d083c5b3d50039c4331c0b31383';
+import { fetchSpecificMovieData } from '../util/fetchData';
 
 const outerStyle = () => css`
   display: flex;
@@ -89,60 +88,55 @@ export default function MoviePage({ match }) {
   const [movieData, setMovieData] = useState();
 
   useEffect(() => {
-    fetchData(movieId, setMovieData);
+    fetchSpecificMovieData(movieId, setMovieData);
   }, [movieId]);
-  console.log(movieData);
-
+  if (!movieData) {
+    return <p>loading...</p>;
+  }
   return (
     <div>
-      {movieData ? (
-        <div css={outerStyle}>
-          <main>
-            <img
-              src={`https://image.tmdb.org/t/p/w300${movieData['poster_path']}`}
-              alt={`movieposter of   ${movieData['original_title']}`}
-            />
-            <div className="textContainer">
-              <header>
-                <h1>
-                  {movieData.title} ({movieData['release_date'].slice(0, 4)})
-                </h1>
-              </header>
-              <div className="Rating">
-                <p>Rating:</p>
-                <StarRatings
-                  numberOfStars={5}
-                  rating={movieData.vote_average / 2}
-                  starRatedColor="#ffa534"
-                  starEmptyColor="#e6f7ff"
-                  starDimension="13px"
-                  starSpacing="2px"
-                />
-              </div>
-
-              <section>
-                <h2>Overview</h2>
-                <p className="overview">{movieData.overview}</p>
-
-                <h5>
-                  Genre:{' '}
-                  {movieData.genres.map((genre, index) => {
-                    return <p key={index}>{genre.name}</p>;
-                  })}
-                </h5>
-
-                <h5>
-                  Runtime: <p>{movieData.runtime} minutes</p>
-                </h5>
-              </section>
+      <div css={outerStyle}>
+        <main>
+          <img
+            src={`https://image.tmdb.org/t/p/w300${movieData['poster_path']}`}
+            alt={`movieposter of   ${movieData['original_title']}`}
+          />
+          <div className="textContainer">
+            <header>
+              <h1>
+                {movieData.title} ({movieData['release_date'].slice(0, 4)})
+              </h1>
+            </header>
+            <div className="Rating">
+              <p>Rating:</p>
+              <StarRatings
+                numberOfStars={5}
+                rating={movieData.vote_average / 2}
+                starRatedColor="#ffa534"
+                starEmptyColor="#e6f7ff"
+                starDimension="13px"
+                starSpacing="2px"
+              />
             </div>
-          </main>
-          <Reviews movieId={movieId} />
-          <Link to="/">Back to homepage</Link>
-        </div>
-      ) : (
-        <h1>loading</h1>
-      )}
+            <section>
+              <h2>Overview</h2>
+              <p className="overview">{movieData.overview}</p>
+              <h5>
+                Genre:{' '}
+                {movieData.genres.map((genre, index) => {
+                  return <p key={index}>{genre.name}</p>;
+                })}
+              </h5>
+              <h5>
+                Runtime: <p>{movieData.runtime} minutes</p>
+              </h5>
+            </section>
+          </div>
+        </main>
+        <Reviews movieId={movieId} />
+        <Link to="/">Back to homepage</Link>
+      </div>
+      )
     </div>
   );
 }

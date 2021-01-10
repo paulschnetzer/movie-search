@@ -1,23 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useRef, useEffect, useState } from 'react';
-let useClickOutside = (handler) => {
-  let domNode = useRef();
-  useEffect(() => {
-    let maybeHandler = (event) => {
-      if (!domNode.current.contains(event.target)) {
-        handler();
-      }
-    };
-    document.addEventListener('mousedown', maybeHandler);
-    return () => {
-      document.removeEventListener('mousedown', maybeHandler);
-    };
-  });
-
-  return domNode;
-};
+import React, { useState } from 'react';
+import { useClickOutside } from '../util/helperFunctions';
 
 const style = (toggle) => css`
   width: 100%;
@@ -54,11 +39,13 @@ const style = (toggle) => css`
         outline: none;
         padding: 0;
         margin-top: -3px;
+        font-size: 20px;
       }
       li {
         list-style: none;
         z-index: 10000;
         display: relative;
+        font-size: 20px;
         .dropdown-content {
           display: ${toggle ? 'block' : 'none'};
           position: absolute;
@@ -92,13 +79,13 @@ export default function Header(props) {
   let handleClick = (option) => {
     props.setTotalMovieData('');
     props.setSearchBy(option);
+    props.setMoviePage(2);
   };
 
   return (
     <header css={style(isOpen)}>
       <div className="navigation">
         <h1>
-          {' '}
           <a href="/">Filmy.com</a>
         </h1>
         <nav>
